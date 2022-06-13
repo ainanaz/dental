@@ -15,11 +15,11 @@ router.get('/login', function (req, res, next) {
 	return res.render('login.ejs');
 });
 
-router.post('/', function(req, res, next) {
+router.post('/signup', function(req, res, next) {
 	console.log(req.body);
 	var personInfo = req.body;
 
-	if(!personInfo.email || !personInfo.username || !personInfo.password || !personInfo.passwordConf){
+	if(!personInfo.name || !personInfo.phone || !personInfo.dob|| !personInfo.city|| !personInfo.email || !personInfo.password || !personInfo.passwordConf){
 		res.send();
 	} else {
 		if (personInfo.password == personInfo.passwordConf) {
@@ -38,8 +38,11 @@ router.post('/', function(req, res, next) {
 
 						var newPerson = new User({
 							unique_id:c,
+							name:personInfo.name,
+							phone:personInfo.phone,
+							dob:personInfo.dob,
+							city:personInfo.city,
 							email:personInfo.email,
-							username: personInfo.username,
 							password: personInfo.password,
 							passwordConf: personInfo.passwordConf
 						});
@@ -52,7 +55,7 @@ router.post('/', function(req, res, next) {
 						});
 
 					}).sort({_id: -1}).limit(1);
-					 return res.render('\login');
+					  res.redirect('/login');
 					//res.send({"Success":"You are regestered,You can login now."});
 					
 				}else{
