@@ -11,10 +11,13 @@ router.get('/signup', function (req, res, next) {
 });
 
 
-router.post('/signup', function(req, res, next) {
+router.get('/login', function (req, res, next) {
+	return res.render('login.ejs');
+});
+
+router.post('/', function(req, res, next) {
 	console.log(req.body);
 	var personInfo = req.body;
-
 
 	if(!personInfo.email || !personInfo.username || !personInfo.password || !personInfo.passwordConf){
 		res.send();
@@ -49,7 +52,9 @@ router.post('/signup', function(req, res, next) {
 						});
 
 					}).sort({_id: -1}).limit(1);
-					res.send({"Success":"You are regestered,You can login now."});
+					 return res.render('\login');
+					//res.send({"Success":"You are regestered,You can login now."});
+					
 				}else{
 					res.send({"Success":"Email is already used."});
 				}
@@ -61,43 +66,34 @@ router.post('/signup', function(req, res, next) {
 	}
 });
 
-router.get('/login', function (req, res, next) {
-	return res.render('login.ejs');
+router.post('/login', (req, res)=>{
+	User.findOne({email:req.body.email},function(err,data){
+    if(data.email == req.body.email && data.password == req.body.password){
+        req.session.userId = data.unique_id;
+        res.redirect('/profile');
+        //res.end("Login Successful...!");
+    }else{
+        res.end("Invalid Username")
+    }
+	});
 });
 
-router.post('/login', function (req, res, next) {
-	//console.log(req.body);
-	User.findOne({email:req.body.email},function(err,data){
-		if(data){
-			
-			if(data.password==req.body.password){
-				//console.log("Done Login");
-				req.session.userId = data.unique_id;
-				//console.log(req.session.userId);
-				res.send({"Success":"Success!"});
-				
-			}else{
-				res.send({"Success":"Wrong password!"});
-			}
+
+router.get('/profile', function (req, res, next) {
+	console.log("profile");
+	User.findOne({unique_id:req.session.userId},function(err,data){
+		console.log("data");
+		console.log(data);
+		if(!data){
+			res.redirect('/');
 		}else{
-			res.send({"Success":"This Email Is not regestered!"});
+			//console.log("found");
+			return res.render('data.ejs', {"name":data.username,"email":data.email});
 		}
 	});
 });
 
-// router.get('/profile', function (req, res, next) {
-// 	console.log("profile");
-// 	User.findOne({unique_id:req.session.userId},function(err,data){
-// 		console.log("data");
-// 		console.log(data);
-// 		if(!data){
-// 			res.redirect('/');
-// 		}else{
-// 			//console.log("found");
-// 			return res.render('data.ejs', {"name":data.username,"email":data.email});
-// 		}
-// 	});
-// });
+
 
 router.get('/logout', function (req, res, next) {
 	console.log("logout")
@@ -165,6 +161,13 @@ router.get('/rooms', function (req, res, next) {
 	return res.render('rooms.ejs');
 });
 
+router.get('/bookingInfo', function (req, res, next) {
+	return res.render('bookingInfo.ejs');
+});
+
+router.get('/listBooking', function (req, res, next) {
+	return res.render('listBooking.ejs');
+});
 
 
 module.exports = router;
