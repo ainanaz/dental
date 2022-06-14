@@ -6,6 +6,7 @@ router.get('/', function (req, res, next) {
 	return res.render('index.ejs');
 });
 
+
 router.get('/signup', function (req, res, next) {
 	return res.render('signup.ejs');
 });
@@ -148,6 +149,7 @@ router.get('/booking', function (req, res, next) {
 	return res.render('booking.ejs');
 });
 
+
 router.get('/services', function (req, res, next) {
 	return res.render('services.ejs');
 });
@@ -172,5 +174,11 @@ router.get('/listBooking', function (req, res, next) {
 	return res.render('listBooking.ejs');
 });
 
+router.get('/patientRecord', function (req, res, next) {
+	return res.render('patientRecord.ejs');
+});
 
+router.get('/bookingDetail', function (req, res, next) {
+	return res.render('bookingDetail.ejs');
+});
 module.exports = router;
