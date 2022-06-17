@@ -181,4 +181,8 @@ router.get('/patientRecord', function (req, res, next) {
 router.get('/bookingDetail', function (req, res, next) {
 	return res.render('bookingDetail.ejs');
 });
+
+router.get('/admin', function (req, res, next) {
+	return res.render('adminIndex.ejs');
+});
 module.exports = router;
