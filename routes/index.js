@@ -70,16 +70,30 @@ router.post('/signup', function(req, res, next) {
 	}
 });
 
+router.get('/adminPage', function (req, res, next) {
+	return res.render('admin/adminIndex.ejs');
+});
+
+const admin = {
+	email:"admin@gmail.com",
+	password:"admin123"
+}
 router.post('/login', (req, res)=>{
+	
+	if(req.body.email == admin.email && req.body.password == admin.password){
+		req.session.user = req.body.email;
+		res.redirect('/adminPage');
+	}else{
 	User.findOne({email:req.body.email},function(err,data){
-    if(data.email == req.body.email && data.password == req.body.password){
+	if(data.email == req.body.email && data.password == req.body.password){
         req.session.userId = data.unique_id;
         res.redirect('/profile');
         //res.end("Login Successful...!");
     }else{
         res.end("Invalid Username")
     }
-	});
+	})
+	};
 });
 
 
@@ -177,18 +191,16 @@ router.get('/bookingInfo', function (req, res, next) {
 });
 
 router.get('/listBooking', function (req, res, next) {
-	return res.render('listBooking.ejs');
+	return res.render('admin/listBooking.ejs');
 });
 
 router.get('/patientRecord', function (req, res, next) {
-	return res.render('patientRecord.ejs');
+	return res.render('admin/patientRecord.ejs');
 });
 
 router.get('/bookingDetail', function (req, res, next) {
-	return res.render('bookingDetail.ejs');
+	return res.render('admin/bookingDetail.ejs');
 });
 
-router.get('/admin', function (req, res, next) {
-	return res.render('adminIndex.ejs');
-});
+
 module.exports = router;
