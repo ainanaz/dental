@@ -206,5 +206,8 @@ router.get('/listPatient', function (req, res, next) {
 	return res.render('admin/listPatient.ejs');
 });
 
+router.get('/listBookingforDr', function (req, res, next) {
+	return res.render('admin/listBookingforDr.ejs');
+});
 
 module.exports = router;
