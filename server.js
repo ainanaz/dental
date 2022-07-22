@@ -31,6 +31,7 @@ app.use(session({
   
 }));
 
+app.set('views', path.join(__dirname, '/views'));
 app.set("view engine", "ejs")
 
 app.use(bodyParser.json());
@@ -43,6 +44,12 @@ app.use('/js', express.static(path.resolve(__dirname, "assets/js")))
 
 var index = require('./routes/index');
 app.use('/', index);
+
+// var book = require('./routes/appoint');
+// app.use("/book",book);
+
+// const userPet = require('./routes/userPet');
+// app.use("/userPet",userPet);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

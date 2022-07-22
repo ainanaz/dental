@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var User = require('../models/user');
+var Booking = require('../models/appointment');
 
 router.get('/', function (req, res, next) {
 	return res.render('index.ejs');
@@ -78,6 +79,7 @@ const admin = {
 	email:"admin@gmail.com",
 	password:"admin123"
 }
+
 router.post('/login', (req, res)=>{
 	
 	if(req.body.email == admin.email && req.body.password == admin.password){
@@ -87,7 +89,8 @@ router.post('/login', (req, res)=>{
 	User.findOne({email:req.body.email},function(err,data){
 	if(data.email == req.body.email && data.password == req.body.password){
         req.session.userId = data.unique_id;
-        res.redirect('/profile');
+        res.redirect('/profile/' + req.session.userId);
+
         //res.end("Login Successful...!");
     }else{
         res.end("Invalid Username")
@@ -96,17 +99,33 @@ router.post('/login', (req, res)=>{
 	};
 });
 
+// router.param('id',function(req,res,next, id){
+// 	User.findById(id, function(err,docs){
+// 		if(err) res.json(err);
+// 		else
+// 		{
+// 			req.id = req.session.userId;
+// 			next();
+// 		}
+// 	});
+// });
+// router.get('/profile/:id/', (req, res) => {
+// 	const { id } = req.params;
+// 	res.send(id)
+//   });
 
-router.get('/profile', function (req, res, next) {
+router.get('/profile/:unique_id', function (req, res, next) {
+	let id = req.params.unique_id;
 	console.log("profile");
-	User.findOne({unique_id:req.session.userId},function(err,data){
+	User.findOne({unique_id:id},function(err,data){
 		console.log("data");
 		console.log(data);
 		if(!data){
 			res.redirect('/');
 		}else{
-			//console.log("found");
-			return res.render('data.ejs', {
+	 		console.log(id);
+			return res.render('profile.ejs' , {
+				"id":data.unique_id,
 				"name":data.name,
 				"phone":data.phone,
 				"dob":data.dob,
@@ -117,7 +136,58 @@ router.get('/profile', function (req, res, next) {
 	});
 });
 
+// router.get('/profile/:unique_id', function(req, res) {
+// 	let id = req.params.unique_id;
+// 	User.findById(id, function(err, user) {
+// 		if (err)
+// 			res.send(err)
 
+// 		 res.render("../views/profile", {user: user});
+// 	});
+// });
+
+// router.get('/profile/:id',function(req,res){
+// 	res.render('/profile',{User: req.params.id})
+// });
+
+// router.post('/profile/:id', function(req, res) {
+// 	// Create Mongose Method to Update a Existing Record Into Collection
+
+// 	let id = req.params.id;
+	
+// 	var data = {
+// 		name : req.body.name,
+// 		phone: req.body.phone,
+// 		dob: req.body.dob,
+// 		city: req.body.city,
+// 		email:req.body.email,
+// 	}
+
+// 	// Save Admin
+
+// 	User.findByIdAndUpdate(id, data, function(err, user) {
+// 	if (err) throw err;
+
+// 	res.redirect("/profile");
+// 	});
+
+// });
+
+
+// router.put('/profile/:id',function(req,res){
+// 	User.update({unique_id:req.params.id},
+// 				{
+// 					name: req.body.name,
+// 					phone: req.body.phone,
+// 					dob: req.body.dob,
+// 					city: req.body.city,
+// 					email:req.body.email,
+// 				}, function(err){
+// 					if(err) res.json(err);
+// 					else
+// 						res.redirect('/profile/'+req.params.id);
+// 				})
+// });
 
 router.get('/logout', function (req, res, next) {
 	console.log("logout")
@@ -133,42 +203,48 @@ router.get('/logout', function (req, res, next) {
 }
 });
 
-// router.get('/forgetpass', function (req, res, next) {
-// 	res.render("forget.ejs");
-// });
-
-// router.post('/forgetpass', function (req, res, next) {
-// 	//console.log('req.body');
-// 	//console.log(req.body);
-// 	User.findOne({email:req.body.email},function(err,data){
-// 		console.log(data);
-// 		if(!data){
-// 			res.send({"Success":"This Email Is not regestered!"});
-// 		}else{
-// 			// res.send({"Success":"Success!"});
-// 			if (req.body.password==req.body.passwordConf) {
-// 			data.password=req.body.password;
-// 			data.passwordConf=req.body.passwordConf;
-
-// 			data.save(function(err, Person){
-// 				if(err)
-// 					console.log(err);
-// 				else
-// 					console.log('Success');
-// 					res.send({"Success":"Password changed!"});
-// 			});
-// 		}else{
-// 			res.send({"Success":"Password does not matched! Both Password should be same."});
-// 		}
-// 		}
-// 	});
+router.post("/booking",(req,res) => {
+    // validate request
 	
-// });
+    if(!req.body){
+        res.status(400).send({ message : "Content can not be emtpy!"});
+        return;
+    }
+
+    const appointment = new Booking({
+
+		bookDate : req.body.date,
+		bookTime : req.body.time,
+		services: req.body.services   
+    })
+        
+
+    // new booking
+    // save user in the database
+    appointment
+        .save(appointment)
+        .then(data => {
+            //res.send(data)
+            res.redirect('/bookingInfo');
+        })
+        .catch(err =>{
+            res.status(500).send({
+                message : err.message || "Some error occurred while creating a create operation"
+            });
+        });
+});
+
+router.get('/bookingInfo', function (req, res, next) {
+	return res.render('bookingInfo.ejs');
+});
 
 router.get('/booking', function (req, res, next) {
 	return res.render('booking.ejs');
 });
 
+// router.get('/profile', function (req, res, next) {
+// 	return res.render('profile.ejs');
+// });
 
 router.get('/services', function (req, res, next) {
 	return res.render('services.ejs');

@@ -3,8 +3,8 @@ var Schema = mongoose.Schema;
 
 bookSchema = new Schema( {
 	
-	unique_id: Number,
-	user_id: Number,
+	// unique_id: Number,
+	user_id: String,
     bookDate: String,
     bookTime: String,
     services: String

@@ -24,33 +24,33 @@
       <div class="row">
         <div class="col-md-6">
           <h2 class="mb-5">Booking Form</h2>
-              <form action="#" method="post">
+              <form action="#" method="post" id="bookingInfo">
                 <div class="row">
                     <div class="col-sm-6 form-group">
                         
-                        <label for=""> Date</label>
+                        <label > Date</label>
                         <div style="position: relative;">
                           <span class="fa fa-calendar icon" style="position: absolute; right: 10px; top: 10px;"></span>
-                          <input type='text' class="form-control" id='arrival_date' />
+                          <input type='date' class="form-control" name='date' />
                         </div>
                     </div>
                     <div class="col-sm-6 form-group">            
                       <label for="">Time</label>
-                        <select name="" id="room" class="form-control">
-                          <option value="">10.30 AM</option>
-                          <option value="">11.30 AM</option>
-                          <option value="">1.30 PM</option>
-                          <option value="">2.30 PM</option>
+                        <select  name="time" class="form-control">
+                          <option value="10.30AM">10.30 AM</option>
+                          <option value="11.30AM">11.30 AM</option>
+                          <option value="1.30PM">1.30 PM</option>
+                          <option value="2.30PM">2.30 PM</option>
                         </select>   
                   </div> 
               </div>
               <div class="row">
                 <div class="col-md-6 form-group">
-                  <label for="room">Services</label>
-                  <select name="" id="room" class="form-control">
-                    <option value="">Scaling</option>
-                    <option value="">Teeth Whitening</option>
-                    <option value="">Dental Implant</option>
+                  <label >Services</label>
+                  <select  name="services" class="form-control">
+                    <option value="scaling">Scaling</option>
+                    <option value="whitening">Teeth Whitening</option>
+                    <option value="dentalImplant">Dental Implant</option>
                   </select>
                   </div>
 
