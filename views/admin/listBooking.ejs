@@ -106,7 +106,7 @@
                         </a>
                         </td>
                     <td>
-                          <a class="btn btn-success delete" href="/delete/<%= data[i]._id%>">Update</a>
+                          <a onclick="sendMail(); return false">Update</a>
                                 <!-- <input type="submit" value="Cancel" class="btn btn-success"> -->
                             </a>
                     </td>
@@ -214,5 +214,19 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
     </script>
 
   <script src="js/main.js"></script>
+
+  <script>
+    function sendMail() 
+{
+    var link = "mailto:2021196179@student.uitm.edu.my"
+             + "?cc=ummuaiman3019@gmail.com"
+             + "&subject=" + encodeURIComponent("Appointment Cancellation")
+             + "&body=" + encodeURIComponent(document.getElementById('myText').value)
+    ;
+    
+    window.location.href = link;  
+}
+
+  </script>
 </body>
 </html>
