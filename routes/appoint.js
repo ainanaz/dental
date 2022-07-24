@@ -39,8 +39,25 @@ router.create =(req,res) => {
                 message : err.message || "Some error occurred while creating a create operation"
             });
         });
+
+        // LIST BOOKING
+    appointment
+        .save(appointment)
+        .then(data => {
+            //res.send(data)
+            res.redirect('/listBooking');
+        })
+        .catch(err =>{
+            res.status(500).send({
+                message : err.message || "Some error occurred while creating a create operation"
+            });
+        });  
 }
 
 router.get('/bookingInfo', function (req, res, next) {
 	return res.render('bookingInfo.ejs');
+});
+
+router.get('/listBooking', function (req, res, next) {
+	return res.render('/admin/listBooking.ejs');
 });

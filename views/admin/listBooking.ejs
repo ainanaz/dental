@@ -88,34 +88,35 @@
                         <th class="product-edit">Date</th>
                         <th class="product-price">Services</th>
                         <th class="product-price">Doctor in Charge</th>
+                        <th class="product-quantity">Update</th>
                         <th class="product-quantity">Cancel</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td><a class="nav-link" href="/bookingDetail">1</a></td>
-                        <td>Aqilah</td>
-                        <td>27/8/2022</td>
-                        <td>Scaling</td>
-                        <td>Dr Marqeen</td>
-                        <td><input type="submit" value="Cancel" class="btn btn-success"></td>
-                    </tr>
-                    <tr>
-                      <td><a class="nav-link" href="/bookingDetail">2</a></td>
-                      <td>Wan</td>
-                      <td>29/8/2022</td>
-                      <td>Braces</td>
-                      <td>Dr Marqeen</td>
-                      <td><input type="submit" value="Cancel" class="btn btn-success"></td>
-                  </tr>
+                  <% for(var i = 0; i < data.length; i++) { %>
                   <tr>
-                    <td><a class="nav-link" href="/bookingDetail">3</a></td>
-                    <td>Chiwei</td>
-                    <td>29/8/2022</td>
-                    <td>Whitening</td>
-                    <td>Dr Marqeen</td>
-                    <td><input type="submit" value="Cancel" class="btn btn-success"></td>
+                    <td><%= i + 1 %></td>
+                    <td><%= data[i].name %></td>
+                    <td><%= data[i].bookDate %></td>                   
+                    <td><%= data[i].services %></td>
+
+                    <td>
+                        <a href="" class="btn border-shadow update">
+                            <span class="text-gradient"><i class="fas fa-pencil-alt"></i></span>
+                        </a>
+                        </td>
+                    <td>
+                          <a class="btn btn-success delete" href="/delete/<%= data[i]._id%>">Update</a>
+                                <!-- <input type="submit" value="Cancel" class="btn btn-success"> -->
+                            </a>
+                    </td>
+                    <td>
+                      <a class="btn btn-success delete" href="/delete/<%= data[i]._id%>">Delete</a>
+                            <!-- <input type="submit" value="Cancel" class="btn btn-success"> -->
+                        </a>
+                    </td>
                 </tr>
+                <% } %>
                     </tbody>
                 </table>
             </div>
