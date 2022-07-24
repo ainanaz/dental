@@ -24,7 +24,8 @@
         <div class="col-md-12">
           <h2 class="mb-5">List Appoinment</h2>
           <div class="w3-container">
-            <table class="w3-table-all w3-centered">
+            <form method="POST">
+            <table class="w3-table-all w3-centered" >
                 <thead>
                     <tr>
                         <th class="product-name">No</th>
@@ -36,16 +37,35 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
+                  <% for(var i = 0; i < data.length; i++) { %>
+                  <tr>
+                    <td><%= i + 1 %></td>
+                    <td><%= data[i].bookDate %></td>
+                    <td><%= data[i].bookTime %></td>
+                    <td><%= data[i].services %></td>
+
+                    <td>
+                        <a href="" class="btn border-shadow update">
+                            <span class="text-gradient"><i class="fas fa-pencil-alt"></i></span>
+                        </a>
+                        </td>
+                    <td>
+                      <a class="btn btn-success delete" href="/delete/<%= data[i]._id%>">Delete</a>
+                            <!-- <input type="submit" value="Cancel" class="btn btn-success"> -->
+                        </a>
+                    </td>
+                </tr>
+                <% } %>
+                    <!-- <tr>
                         <td>1</td>
                         <td>27/8/2022</td>
                         <td>11.30 AM</td>
                         <td>Scaling</td>
                         <td>Dr Marqeen</td>
-                        <td><input type="submit" value="Cancel" class="btn btn-success"></td>
-                    </tr>
+                        <td></td>
+                    </tr> -->
                     </tbody>
-                </table>
+                </table></form>
             </div>
         </div>
             

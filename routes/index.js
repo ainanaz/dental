@@ -80,6 +80,8 @@ const admin = {
 	password:"admin123"
 }
 
+// ------------------------------------- LOGIN ------------------------------------------
+
 router.post('/login', (req, res)=>{
 	
 	if(req.body.email == admin.email && req.body.password == admin.password){
@@ -89,9 +91,8 @@ router.post('/login', (req, res)=>{
 	User.findOne({email:req.body.email},function(err,data){
 	if(data.email == req.body.email && data.password == req.body.password){
         req.session.userId = data.unique_id;
-        res.redirect('/profile/' + req.session.userId);
+        res.redirect('/profile');
 
-        //res.end("Login Successful...!");
     }else{
         res.end("Invalid Username")
     }
@@ -99,31 +100,33 @@ router.post('/login', (req, res)=>{
 	};
 });
 
-// router.param('id',function(req,res,next, id){
-// 	User.findById(id, function(err,docs){
-// 		if(err) res.json(err);
-// 		else
-// 		{
-// 			req.id = req.session.userId;
-// 			next();
-// 		}
-// 	});
-// });
+// ------------------------------------- LOGIN ------------------------------------------
+
+router.param('id',function(req,res,next, id){
+	User.findById(id, function(err,docs){
+		if(err) res.json(err);
+		else
+		{
+			req._id = docs;
+			next();
+		}
+	});
+});
 // router.get('/profile/:id/', (req, res) => {
 // 	const { id } = req.params;
 // 	res.send(id)
 //   });
 
-router.get('/profile/:unique_id', function (req, res, next) {
-	let id = req.params.unique_id;
+router.get('/profile', function (req, res, next) {
+	//let id = req.params.unique_id;
 	console.log("profile");
-	User.findOne({unique_id:id},function(err,data){
+	User.findOne({unique_id:req.session.userId},function(err,data){
 		console.log("data");
 		console.log(data);
 		if(!data){
 			res.redirect('/');
 		}else{
-	 		console.log(id);
+	 		console.log("found");
 			return res.render('profile.ejs' , {
 				"id":data.unique_id,
 				"name":data.name,
@@ -144,10 +147,6 @@ router.get('/profile/:unique_id', function (req, res, next) {
 
 // 		 res.render("../views/profile", {user: user});
 // 	});
-// });
-
-// router.get('/profile/:id',function(req,res){
-// 	res.render('/profile',{User: req.params.id})
 // });
 
 // router.post('/profile/:id', function(req, res) {
@@ -203,6 +202,7 @@ router.get('/logout', function (req, res, next) {
 }
 });
 
+//-----------------------------------------------------Appointment---------------------------------------
 router.post("/booking",(req,res) => {
     // validate request
 	
@@ -210,9 +210,13 @@ router.post("/booking",(req,res) => {
         res.status(400).send({ message : "Content can not be emtpy!"});
         return;
     }
+	User.findOne({_id:req.session.userId},function(err,docs){
+			req._id = docs;
+		});
+	
 
     const appointment = new Booking({
-
+		user_id : req._id,
 		bookDate : req.body.date,
 		bookTime : req.body.time,
 		services: req.body.services   
@@ -233,6 +237,51 @@ router.post("/booking",(req,res) => {
             });
         });
 });
+
+router.get("/bookingInfo",(req, res,)=>{
+
+	Booking.find((err, docs) => {
+        if (!err) {
+            res.render("bookingInfo.ejs", {
+                data: docs
+            });
+        } else {
+            console.log('Failed to retrieve the Users List: ' + err);
+        }
+    });
+
+	router.route('/bookingInfo/:id').get((req, res) => {
+		Booking.findById(req.params.id, (error, data) => {
+		if (error) {
+		  return next(error)
+		} else {
+		  res.json(data)
+		}
+	  })
+	})
+    //     Booking.find()
+    //         .then(appointment => {
+               
+	// 			return res.render("bookingInfo.ejs", {appointment: appointment})
+    //         })
+    //         .catch(err => {
+    //             res.status(500).send({ message : err.message || "Error Occurred while retriving user information" })
+    //         })
+    // }
+
+});
+
+router.delete("/delete/:id",(req, res,)=>{
+    Booking.findByIdAndRemove(req.params.id, (err, doc) => {
+        if (!err) {
+            res.redirect('bookingInfo.ejs');
+        } else {
+            console.log('Failed to Delete user Details: ' + err);
+        }
+    });
+});
+
+//-----------------------------------------------------Appointment---------------------------------------
 
 router.get('/bookingInfo', function (req, res, next) {
 	return res.render('bookingInfo.ejs');
