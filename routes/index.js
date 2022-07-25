@@ -238,7 +238,7 @@ router.post("/booking",(req,res) => {
     // validate request
 	
     if(!req.body){
-        res.status(400).send({ message : "Content can not be emtpy!"});
+        res.status(400).send({ message : "Content cannot be empty!"});
         return;
     }
 
@@ -316,6 +316,42 @@ router.get("/delete/:_id",(req, res,)=>{
     });
 });
 
+//LIST BOOKING
+
+router.get("/listBooking",(req, res,)=>{
+
+	Booking.find((err, docs) => {
+        if (!err) {
+            res.render("admin/listBooking.ejs", {
+                data: docs
+            });
+        } else {
+            console.log('Failed to retrieve the Users List: ' + err);
+        }
+    });
+
+	router.route('/listBooking/:id').get((req, res) => {
+		Booking.findById(req.params.id, (error, data) => {
+		if (error) {
+		  return next(error)
+		} else {
+		  res.json(data)
+		}
+	  })
+	})
+    
+
+});
+
+router.delete("/delete/:id",(req, res,)=>{
+    Booking.findByIdAndRemove(req.params.id, (err, doc) => {
+        if (!err) {
+            res.redirect('admin/listBooking.ejs');
+        } else {
+            console.log('Failed to Delete user Details: ' + err);
+        }
+    });
+});
 //-----------------------------------------------------Appointment---------------------------------------
 
 // router.get('/bookingInfo', function (req, res, next) {
@@ -371,3 +407,4 @@ router.get('/listBookingforDr', function (req, res, next) {
 });
 
 module.exports = router;
+
