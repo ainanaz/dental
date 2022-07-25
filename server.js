@@ -42,7 +42,7 @@ app.use('/images', express.static(path.resolve(__dirname, "assets/images")))
 app.use('/js', express.static(path.resolve(__dirname, "assets/js")))
 
 
-var index = require('./routes/index');
+const index = require('./routes/index');
 app.use('/', index);
 
 // var book = require('./routes/appoint');

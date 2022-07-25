@@ -102,20 +102,41 @@ router.post('/login', (req, res)=>{
 
 // ------------------------------------- LOGIN ------------------------------------------
 
-router.param('id',function(req,res,next, id){
-	User.findById(id, function(err,docs){
-		if(err) res.json(err);
-		else
-		{
-			req._id = docs;
-			next();
-		}
-	});
-});
+// router.param('id',function(req,res,next, id){
+// 	User.findById(id, function(err,docs){
+// 		if(err) res.json(err);
+// 		else
+// 		{
+// 			req._id = docs;
+// 			next();
+// 		}
+// 	});
+// });
 // router.get('/profile/:id/', (req, res) => {
 // 	const { id } = req.params;
 // 	res.send(id)
 //   });
+
+// router.get('/profile/:id', function(req, res){
+// 	User.find({_id: req.params.id}, function(err, docs){
+// 	if(err) res.json(err);
+// 	else    res.render('show', {user: docs[0]});
+// 	});
+// 	});
+
+// router.param('id', function(req, res, next, id){
+// 	User.findById(id, function(err, docs){
+// 	if(err) res.json(err);
+// 	else
+// 		{
+// 		req.userId = docs[0];
+// 		next();
+// 		}
+// 	});
+// });
+		 
+		
+
 
 router.get('/profile', function (req, res, next) {
 	//let id = req.params.unique_id;
@@ -139,38 +160,48 @@ router.get('/profile', function (req, res, next) {
 	});
 });
 
-// router.get('/profile/:unique_id', function(req, res) {
-// 	let id = req.params.unique_id;
-// 	User.findById(id, function(err, user) {
-// 		if (err)
-// 			res.send(err)
+// router.get('/editProfile/:id', function(req, res){
+// 		res.render('editProfile', {user: req.userId});
+// 		});
 
-// 		 res.render("../views/profile", {user: user});
-// 	});
-// });
-
-// router.post('/profile/:id', function(req, res) {
-// 	// Create Mongose Method to Update a Existing Record Into Collection
-
-// 	let id = req.params.id;
+router.get('/editProfile/:unique_id', function(req, res, next) {
 	
-// 	var data = {
-// 		name : req.body.name,
-// 		phone: req.body.phone,
-// 		dob: req.body.dob,
-// 		city: req.body.city,
-// 		email:req.body.email,
-// 	}
+	User.findById(req.params.unique_id, (err, doc) => {
+        if (!err) {
+            res.render("editProfile.ejs", {
+                title: "Update User Details",
+                data: doc
+            });
+        }else{
+            req.flash('error', 'User not found with id = ' + req.params.id)
+            res.redirect('/profile')
+        }
+    });
+ 
+});
 
-// 	// Save Admin
+router.post('/update/:id', function(req, res, next) {
+	// Create Mongose Method to Update a Existing Record Into Collection
 
-// 	User.findByIdAndUpdate(id, data, function(err, user) {
-// 	if (err) throw err;
+	let id = req.params.unique_id;
+	
+	var data = {
+		name : req.body.name,
+		phone: req.body.phone,
+		dob: req.body.dob,
+		city: req.body.city,
+		email:req.body.email,
+	}
 
-// 	res.redirect("/profile");
-// 	});
+	// Save User
 
-// });
+	User.findByIdAndUpdate(id, data, function(err, data) {
+	if (err) throw err;
+
+	res.redirect("/profile");
+	});
+
+});
 
 
 // router.put('/profile/:id',function(req,res){
@@ -210,9 +241,10 @@ router.post("/booking",(req,res) => {
         res.status(400).send({ message : "Content can not be emtpy!"});
         return;
     }
+
 	User.findOne({_id:req.session.userId},function(err,docs){
 			req._id = docs;
-		});
+	});
 	
 
     const appointment = new Booking({
@@ -248,17 +280,17 @@ router.get("/bookingInfo",(req, res,)=>{
         } else {
             console.log('Failed to retrieve the Users List: ' + err);
         }
-    });
+	});
 
-	router.route('/bookingInfo/:id').get((req, res) => {
-		Booking.findById(req.params.id, (error, data) => {
-		if (error) {
-		  return next(error)
-		} else {
-		  res.json(data)
-		}
-	  })
-	})
+	// router.route('/bookingInfo/:id').get((req, res) => {
+	// 	Booking.findById(req.params.id, (error, data) => {
+	// 	if (error) {
+	// 	  return next(error)
+	// 	} else {
+	// 	  res.json(data)
+	// 	}
+	//   })
+	// })
     //     Booking.find()
     //         .then(appointment => {
                
@@ -271,10 +303,13 @@ router.get("/bookingInfo",(req, res,)=>{
 
 });
 
-router.delete("/delete/:id",(req, res,)=>{
-    Booking.findByIdAndRemove(req.params.id, (err, doc) => {
+
+
+router.get("/delete/:_id",(req, res,)=>{
+	
+    Booking.findByIdAndRemove(req.params._id, (err, doc) => {
         if (!err) {
-            res.redirect('bookingInfo.ejs');
+            res.redirect('/bookingInfo');
         } else {
             console.log('Failed to Delete user Details: ' + err);
         }
@@ -283,16 +318,16 @@ router.delete("/delete/:id",(req, res,)=>{
 
 //-----------------------------------------------------Appointment---------------------------------------
 
-router.get('/bookingInfo', function (req, res, next) {
-	return res.render('bookingInfo.ejs');
-});
+// router.get('/bookingInfo', function (req, res, next) {
+// 	return res.render('bookingInfo.ejs');
+// });
 
 router.get('/booking', function (req, res, next) {
 	return res.render('booking.ejs');
 });
 
-// router.get('/profile', function (req, res, next) {
-// 	return res.render('profile.ejs');
+// router.get('/editprofile', function (req, res, next) {
+// 	return res.render('editProfile.ejs');
 // });
 
 router.get('/services', function (req, res, next) {

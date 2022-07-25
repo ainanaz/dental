@@ -1,0 +1,50 @@
+<section class="site-section">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6">
+          <h2 class="mb-5">My Account</h2>
+          <form  method="POST" action="/update/<%=data.unique_id%>">
+            <div class="row">
+              <div class="col-md-12 form-group">
+                <!-- //<input type='hidden' name='id' value="<%=id %>" /> -->
+                <label >Name</label>
+                <input type="text" name="name" class="form-control" value="<%=data.name %>" >
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12 form-group">
+                <label >Phone </label>
+                <input type="text" name="phone" class="form-control" value="<%=data.phone %>" >
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12 form-group">
+                <label >Date of Birth</label>
+                <input type="date" name="dob" class="form-control" value="<=%data.dob %>" >
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12 form-group">
+                <label >City</label>
+                <input type="text" name="city" class="form-control" value="<=%data.city %>" >
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12 form-group">
+                <label >Email</label>
+                <input type="email" id="email" class="form-control " value="<=%data.email %>" disabled>
+              </div>
+            </div>
+            <input type="submit" value="Update" class="btn btn-success">
+          </form>
+            </div>
+            <div class="col-md-1"></div>
+            <div class="col-md-5">
+              <h3 class="mb-5">Paragraph</h3>
+              <p class="mb-5"><img src="images/img_4.jpg" alt="" class="img-fluid"></p>
+              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vitae labore aspernatur cumque inventore voluptatibus odit doloribus! Ducimus, animi perferendis repellat. Ducimus harum alias quas, quibusdam provident ea sed, sapiente quo.</p>
+              <p>Ullam cumque eveniet, fugiat quas maiores, non modi eos deleniti minima, nesciunt assumenda sequi vitae culpa labore nulla! Cumque vero, magnam ab optio quidem debitis dignissimos nihil nesciunt vitae impedit!</p>
+            </div>
+      </div>
+    </div>
+  </section>
