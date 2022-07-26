@@ -5,9 +5,11 @@ bookSchema = new Schema( {
 	
 	// unique_id: Number,
 	user_id: Number,
+    user_name: String,
     bookDate: String,
     bookTime: String,
-    services: String
+    services: String,
+    doctor: String
 
 }),
 Booking = mongoose.model('Booking', bookSchema);
