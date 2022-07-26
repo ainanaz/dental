@@ -90,7 +90,7 @@ router.post('/login', (req, res)=>{
 	}else{
 	User.findOne({email:req.body.email},function(err,data){
 	if(data.email == req.body.email && data.password == req.body.password){
-        req.session.userId = data.unique_id;
+        req.session.userId = data._id;
         res.redirect('/profile');
 
     }else{
@@ -102,46 +102,10 @@ router.post('/login', (req, res)=>{
 
 // ------------------------------------- LOGIN ------------------------------------------
 
-// router.param('id',function(req,res,next, id){
-// 	User.findById(id, function(err,docs){
-// 		if(err) res.json(err);
-// 		else
-// 		{
-// 			req._id = docs;
-// 			next();
-// 		}
-// 	});
-// });
-// router.get('/profile/:id/', (req, res) => {
-// 	const { id } = req.params;
-// 	res.send(id)
-//   });
-
-// router.get('/profile/:id', function(req, res){
-// 	User.find({_id: req.params.id}, function(err, docs){
-// 	if(err) res.json(err);
-// 	else    res.render('show', {user: docs[0]});
-// 	});
-// 	});
-
-// router.param('id', function(req, res, next, id){
-// 	User.findById(id, function(err, docs){
-// 	if(err) res.json(err);
-// 	else
-// 		{
-// 		req.userId = docs[0];
-// 		next();
-// 		}
-// 	});
-// });
-		 
-		
-
-
 router.get('/profile', function (req, res, next) {
 	//let id = req.params.unique_id;
 	console.log("profile");
-	User.findOne({unique_id:req.session.userId},function(err,data){
+	User.findOne({_id:req.session.userId},function(err,data){
 		console.log("data");
 		console.log(data);
 		if(!data){
@@ -160,65 +124,43 @@ router.get('/profile', function (req, res, next) {
 	});
 });
 
-// router.get('/editProfile/:id', function(req, res){
-// 		res.render('editProfile', {user: req.userId});
-// 		});
 
-router.get('/editProfile/:unique_id', function(req, res, next) {
-	
-	User.findById(req.params.unique_id, (err, doc) => {
-        if (!err) {
-            res.render("editProfile.ejs", {
-                title: "Update User Details",
-                data: doc
-            });
-        }else{
-            req.flash('error', 'User not found with id = ' + req.params.id)
-            res.redirect('/profile')
-        }
-    });
+// router.get('/editProfile', function(req, res, next) {
+// 	User.findOne({unique_id:req.session.userId},function(err,docs){
+//         if (!err) {
+//             res.render('editProfile', {
+//                 title: "Update User Details",
+//                 data: docs
+//             });
+//         }else{
+//             res.redirect('/profile')
+//         }
+//     });
  
-});
+// });
 
-router.post('/update/:id', function(req, res, next) {
+router.post('/update', function(req, res, next) {
 	// Create Mongose Method to Update a Existing Record Into Collection
-
-	let id = req.params.unique_id;
 	
 	var data = {
 		name : req.body.name,
 		phone: req.body.phone,
 		dob: req.body.dob,
 		city: req.body.city,
-		email:req.body.email,
+		email:req.body.email
 	}
-
-	// Save User
-
-	User.findByIdAndUpdate(id, data, function(err, data) {
-	if (err) throw err;
-
-	res.redirect("/profile");
+		// Save User
+		User.findByIdAndUpdate({_id:req.session.userId}, data, function(err, docs) {
+			if (err) throw err
+			else{
+				console.log(docs);
+				res.redirect('/profile');
+			}
+	
 	});
-
-});
-
-
-// router.put('/profile/:id',function(req,res){
-// 	User.update({unique_id:req.params.id},
-// 				{
-// 					name: req.body.name,
-// 					phone: req.body.phone,
-// 					dob: req.body.dob,
-// 					city: req.body.city,
-// 					email:req.body.email,
-// 				}, function(err){
-// 					if(err) res.json(err);
-// 					else
-// 						res.redirect('/profile/'+req.params.id);
-// 				})
-// });
-
+	});
+	//let id = req.params.unique_id;
+	
 router.get('/logout', function (req, res, next) {
 	console.log("logout")
 	if (req.session) {
@@ -242,13 +184,10 @@ router.post("/booking",(req,res) => {
         return;
     }
 
-	User.findOne({_id:req.session.userId},function(err,docs){
-			req._id = docs;
-	});
-	
-
-    const appointment = new Booking({
-		user_id : req._id,
+	User.findOne({_id:req.session.userId},function(err,data){
+		let id = data.unique_id;
+		const appointment = new Booking({
+		user_id : id,
 		bookDate : req.body.date,
 		bookTime : req.body.time,
 		services: req.body.services   
@@ -261,52 +200,35 @@ router.post("/booking",(req,res) => {
         .save(appointment)
         .then(data => {
             //res.send(data)
-            res.redirect('/bookingInfo');
+            res.redirect('bookingInfo');
         })
         .catch(err =>{
             res.status(500).send({
                 message : err.message || "Some error occurred while creating a create operation"
             });
         });
+	});
+	
 });
 
 router.get("/bookingInfo",(req, res,)=>{
-
-	Booking.find((err, docs) => {
-        if (!err) {
+	
+	User.findOne({_id:req.session.userId},function(err,data){
+	Booking.find({user_id:data.unique_id},(err, docs) => {
+        if (!err) {	
             res.render("bookingInfo.ejs", {
                 data: docs
-            });
+            });	
         } else {
             console.log('Failed to retrieve the Users List: ' + err);
         }
 	});
 
-	// router.route('/bookingInfo/:id').get((req, res) => {
-	// 	Booking.findById(req.params.id, (error, data) => {
-	// 	if (error) {
-	// 	  return next(error)
-	// 	} else {
-	// 	  res.json(data)
-	// 	}
-	//   })
-	// })
-    //     Booking.find()
-    //         .then(appointment => {
-               
-	// 			return res.render("bookingInfo.ejs", {appointment: appointment})
-    //         })
-    //         .catch(err => {
-    //             res.status(500).send({ message : err.message || "Error Occurred while retriving user information" })
-    //         })
-    // }
-
+});
 });
 
 
-
-router.get("/delete/:_id",(req, res,)=>{
-	
+router.get("/delete/:_id",(req, res,)=>{	
     Booking.findByIdAndRemove(req.params._id, (err, doc) => {
         if (!err) {
             res.redirect('/bookingInfo');
@@ -316,8 +238,10 @@ router.get("/delete/:_id",(req, res,)=>{
     });
 });
 
-//LIST BOOKING
+//-------------------------------------------------------APPOINTMENT-------------------------------------------------------------------
 
+//LIST BOOKING
+//------------------------------------------------ADMIN------------------------------------------------------------------------------
 router.get("/listBooking",(req, res,)=>{
 
 	Booking.find((err, docs) => {
@@ -362,9 +286,9 @@ router.get('/booking', function (req, res, next) {
 	return res.render('booking.ejs');
 });
 
-// router.get('/editprofile', function (req, res, next) {
-// 	return res.render('editProfile.ejs');
-// });
+router.get('/editprofile', function (req, res, next) {
+	return res.render('editProfile.ejs');
+});
 
 router.get('/services', function (req, res, next) {
 	return res.render('services.ejs');

@@ -3,10 +3,10 @@
       <div class="row">
         <div class="col-md-6">
           <h2 class="mb-5">My Account</h2>
-          <form  method="POST" action="/update/<%=data.unique_id%>">
+          <form  method="POST" action="/update/">
             <div class="row">
               <div class="col-md-12 form-group">
-                <!-- //<input type='hidden' name='id' value="<%=id %>" /> -->
+                
                 <label >Name</label>
                 <input type="text" name="name" class="form-control" value="<%=data.name %>" >
               </div>
@@ -20,22 +20,23 @@
             <div class="row">
               <div class="col-md-12 form-group">
                 <label >Date of Birth</label>
-                <input type="date" name="dob" class="form-control" value="<=%data.dob %>" >
+                <input type="date" name="dob" class="form-control" value="<%=data.dob %>" >
               </div>
             </div>
             <div class="row">
               <div class="col-md-12 form-group">
                 <label >City</label>
-                <input type="text" name="city" class="form-control" value="<=%data.city %>" >
+                <input type="text" name="city" class="form-control" value="<%=data.city %>" >
               </div>
             </div>
             <div class="row">
               <div class="col-md-12 form-group">
                 <label >Email</label>
-                <input type="email" id="email" class="form-control " value="<=%data.email %>" disabled>
+                <input type="email" name="email" class="form-control " value="<%=data.email %>" disabled>
               </div>
             </div>
-            <input type="submit" value="Update" class="btn btn-success">
+            <a class="btn btn-success" href="/delete/">Update</a>
+            <!-- <input type="submit" value="Update" class="btn btn-success"> -->
           </form>
             </div>
             <div class="col-md-1"></div>
