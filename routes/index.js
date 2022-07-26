@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var User = require('../models/user');
 var Booking = require('../models/appointment');
+var nodemailer = require('nodemailer');
 
 router.get('/', function (req, res, next) {
 	return res.render('index.ejs');
@@ -193,7 +194,6 @@ router.post("/booking",(req,res) => {
 		services: req.body.services   
     })
         
-
     // new booking
     // save user in the database
     appointment
@@ -240,6 +240,8 @@ router.get("/delete/:_id",(req, res,)=>{
 
 //-------------------------------------------------------APPOINTMENT-------------------------------------------------------------------
 
+
+
 //LIST BOOKING
 //------------------------------------------------ADMIN------------------------------------------------------------------------------
 router.get("/listBooking",(req, res,)=>{
@@ -276,7 +278,7 @@ router.delete("/delete/:id",(req, res,)=>{
         }
     });
 });
-//-----------------------------------------------------Appointment---------------------------------------
+//-----------------------------------------------------ADMIN---------------------------------------
 
 // router.get('/bookingInfo', function (req, res, next) {
 // 	return res.render('bookingInfo.ejs');
