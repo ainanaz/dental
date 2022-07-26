@@ -105,13 +105,15 @@
                             <span class="text-gradient"><i class="fas fa-pencil-alt"></i></span>
                         </a>
                         </td>
-                    <td><% var nodemailer = require('nodemailer'); %>
-                          <a onclick="sendMail(); return false">Update</a>
-                                <!-- <input type="submit" value="Cancel" class="btn btn-success"> -->
+                    <td>
+                      
+                        <a class="btn btn-success delete" >Update</a>
+                        <!--onclick="sendMail(); return false" -->
+                                 
                             </a>
                     </td>
                     <td>
-                      <a class="btn btn-success delete" href="/delete/<%= data[i]._id%>">Delete</a>
+                      <a  class="btn btn-success delete" href="/delete/<%= data[i]._id%>">Cancel</a>
                             <!-- <input type="submit" value="Cancel" class="btn btn-success"> -->
                         </a>
                     </td>
@@ -216,7 +218,7 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
   <script src="js/main.js"></script>
 
   
-  <%
+  <!--<%
   function sendMail() 
 {
   var nodemailer = require('nodemailer');
@@ -245,7 +247,7 @@ transporter.sendMail(mailOptions, function(error, info){
 });  
 }
 
-%>
+%> -->
   
 </body>
 </html>
