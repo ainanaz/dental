@@ -90,7 +90,7 @@ router.post('/login', (req, res)=>{
 	}else{
 	User.findOne({email:req.body.email},function(err,data){
 	if(data.email == req.body.email && data.password == req.body.password){
-        req.session.userId = data.unique_id;
+        req.session.userId = data._id;
         res.redirect('/profile');
 
     }else{
@@ -102,46 +102,10 @@ router.post('/login', (req, res)=>{
 
 // ------------------------------------- LOGIN ------------------------------------------
 
-// router.param('id',function(req,res,next, id){
-// 	User.findById(id, function(err,docs){
-// 		if(err) res.json(err);
-// 		else
-// 		{
-// 			req._id = docs;
-// 			next();
-// 		}
-// 	});
-// });
-// router.get('/profile/:id/', (req, res) => {
-// 	const { id } = req.params;
-// 	res.send(id)
-//   });
-
-// router.get('/profile/:id', function(req, res){
-// 	User.find({_id: req.params.id}, function(err, docs){
-// 	if(err) res.json(err);
-// 	else    res.render('show', {user: docs[0]});
-// 	});
-// 	});
-
-// router.param('id', function(req, res, next, id){
-// 	User.findById(id, function(err, docs){
-// 	if(err) res.json(err);
-// 	else
-// 		{
-// 		req.userId = docs[0];
-// 		next();
-// 		}
-// 	});
-// });
-		 
-		
-
-
 router.get('/profile', function (req, res, next) {
 	//let id = req.params.unique_id;
 	console.log("profile");
-	User.findOne({unique_id:req.session.userId},function(err,data){
+	User.findOne({_id:req.session.userId},function(err,data){
 		console.log("data");
 		console.log(data);
 		if(!data){
@@ -160,16 +124,13 @@ router.get('/profile', function (req, res, next) {
 	});
 });
 
-// router.get('/editProfile/:id', function(req, res){
-// 		res.render('editProfile', {user: req.userId});
-// 		});
 
-// router.get('/editProfile/:unique_id', function(req, res, next) {
-// 	User.findOne({unique_id:req.session.userId},function(err,doc){
+// router.get('/editProfile', function(req, res, next) {
+// 	User.findOne({unique_id:req.session.userId},function(err,docs){
 //         if (!err) {
 //             res.render('editProfile', {
 //                 title: "Update User Details",
-//                 data: doc
+//                 data: docs
 //             });
 //         }else{
 //             res.redirect('/profile')
@@ -178,7 +139,7 @@ router.get('/profile', function (req, res, next) {
  
 // });
 
-router.post('/update/:unique_id', function(req, res, next) {
+router.post('/update', function(req, res, next) {
 	// Create Mongose Method to Update a Existing Record Into Collection
 	
 	var data = {
@@ -186,10 +147,10 @@ router.post('/update/:unique_id', function(req, res, next) {
 		phone: req.body.phone,
 		dob: req.body.dob,
 		city: req.body.city,
-		email:req.body.email,
+		email:req.body.email
 	}
 		// Save User
-		User.findByIdAndUpdate({unique_id:req.session.userId}, data, function(err, docs) {
+		User.findByIdAndUpdate({_id:req.session.userId}, data, function(err, docs) {
 			if (err) throw err
 			else{
 				console.log(docs);
@@ -200,23 +161,6 @@ router.post('/update/:unique_id', function(req, res, next) {
 	});
 	//let id = req.params.unique_id;
 	
-
-
-// router.put('/profile/:id',function(req,res){
-// 	User.update({unique_id:req.params.id},
-// 				{
-// 					name: req.body.name,
-// 					phone: req.body.phone,
-// 					dob: req.body.dob,
-// 					city: req.body.city,
-// 					email:req.body.email,
-// 				}, function(err){
-// 					if(err) res.json(err);
-// 					else
-// 						res.redirect('/profile/'+req.params.id);
-// 				})
-// });
-
 router.get('/logout', function (req, res, next) {
 	console.log("logout")
 	if (req.session) {
@@ -240,9 +184,10 @@ router.post("/booking",(req,res) => {
         return;
     }
 
-	User.findOne({unique_id:req.session.userId},function(err,data){
+	User.findOne({_id:req.session.userId},function(err,data){
+		let id = data.unique_id;
 		const appointment = new Booking({
-		user_id : data.unique_id,
+		user_id : id,
 		bookDate : req.body.date,
 		bookTime : req.body.time,
 		services: req.body.services   
@@ -255,7 +200,7 @@ router.post("/booking",(req,res) => {
         .save(appointment)
         .then(data => {
             //res.send(data)
-            res.redirect('/bookingInfo');
+            res.redirect('bookingInfo');
         })
         .catch(err =>{
             res.status(500).send({
@@ -268,7 +213,7 @@ router.post("/booking",(req,res) => {
 
 router.get("/bookingInfo",(req, res,)=>{
 	
-	User.findOne({unique_id:req.session.userId},function(err,data){
+	User.findOne({_id:req.session.userId},function(err,data){
 	Booking.find({user_id:data.unique_id},(err, docs) => {
         if (!err) {	
             res.render("bookingInfo.ejs", {
