@@ -189,6 +189,7 @@ router.post("/booking",(req,res) => {
 		let id = data.unique_id;
 		const appointment = new Booking({
 		user_id : id,
+		user_name: data.name,
 		bookDate : req.body.date,
 		bookTime : req.body.time,
 		services: req.body.services   
@@ -237,9 +238,11 @@ router.get("/delete/:_id",(req, res,)=>{
         }
     });
 });
+// 
+
 
 //-------------------------------------------------------APPOINTMENT-------------------------------------------------------------------
-
+ 
 
 
 //LIST BOOKING
@@ -249,11 +252,13 @@ router.get("/listBooking",(req, res,)=>{
 	Booking.find((err, docs) => {
         if (!err) {
             res.render("admin/listBooking.ejs", {
-                data: docs
+				data: docs,
+                
             });
         } else {
             console.log('Failed to retrieve the Users List: ' + err);
         }
+<<<<<<< HEAD
     });
 	
 }); 
@@ -312,16 +317,23 @@ router.get('/listBooking', function (req, res, next) {
 		}
 	});
 });
+=======
+	});
+}); 
+
+>>>>>>> ee693fa17fbdc2e4faea98897b5a23600db71ca1
 
 router.get("/deleteAdmin/:_id",(req, res,)=>{
     Booking.findByIdAndRemove(req.params._id, (err, doc) => {
+		let id = doc.user_id;
         if (!err) {
             res.redirect('/listBooking');
         } else {
             console.log('Failed to Delete user Details: ' + err);
         }
-    });
+ });
 });
+
 //-----------------------------------------------------ADMIN---------------------------------------
 
 // router.get('/bookingInfo', function (req, res, next) {
