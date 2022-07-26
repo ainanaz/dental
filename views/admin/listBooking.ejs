@@ -106,12 +106,14 @@
                         </a>
                         </td>
                     <td>
-                          <a onclick="sendMail(); return false">Update</a>
-                                <!-- <input type="submit" value="Cancel" class="btn btn-success"> -->
+                      
+                        <a class="btn btn-success delete" >Update</a>
+                        
+                                 
                             </a>
                     </td>
                     <td>
-                      <a class="btn btn-success delete" href="/delete/<%= data[i]._id%>">Delete</a>
+                      <a  class="btn btn-success delete" href="/delete/<%= data[i]._id%>">Cancel</a>
                             <!-- <input type="submit" value="Cancel" class="btn btn-success"> -->
                         </a>
                     </td>
@@ -215,18 +217,37 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 
   <script src="js/main.js"></script>
 
-  <script>
-    function sendMail() 
+  
+  <!--<%
+  function sendMail() 
 {
-    var link = "mailto:2021196179@student.uitm.edu.my"
-             + "?cc=ummuaiman3019@gmail.com"
-             + "&subject=" + encodeURIComponent("Appointment Cancellation")
-             + "&body=" + encodeURIComponent(document.getElementById('myText').value)
-    ;
-    
-    window.location.href = link;  
+  var nodemailer = require('nodemailer');
+
+var transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: 'zuhaimucs251@gmail.com',
+    pass: 'zuhaimu1234'
+  }
+});
+
+var mailOptions = {
+  from: 'zuhaimucs251@gmail.com',
+  to: 'pagami.zonda26@gmail.com',
+  subject: 'Sending Email using Node.js',
+  text: 'That was easy!'
+};
+
+transporter.sendMail(mailOptions, function(error, info){
+  if (error) {
+    console.log(error);
+  } else {
+    console.log('Email sent: ' + info.response);
+  }
+});  
 }
 
-  </script>
+%> -->
+  
 </body>
 </html>
