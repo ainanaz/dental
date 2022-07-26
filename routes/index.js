@@ -255,24 +255,22 @@ router.get("/listBooking",(req, res,)=>{
             console.log('Failed to retrieve the Users List: ' + err);
         }
     });
-
-	router.route('/listBooking/:id').get((req, res) => {
-		Booking.findById(req.params.id, (error, data) => {
-		if (error) {
-		  return next(error)
-		} else {
-		  res.json(data)
-		}
-	  })
-	})
+	// router.route('/listBooking/:id').get((req, res) => {
+	// 	Booking.findById(req.params.id, (error, data) => {
+	// 	if (error) {
+	// 	  return next(error)
+	// 	} else {
+	// 	  res.json(data)
+	// 	}
+	//   })
+	// })
     
-
 });
 
-router.delete("/delete/:id",(req, res,)=>{
-    Booking.findByIdAndRemove(req.params.id, (err, doc) => {
+router.get("/deleteAdmin/:_id",(req, res,)=>{
+    Booking.findByIdAndRemove(req.params._id, (err, doc) => {
         if (!err) {
-            res.redirect('admin/listBooking.ejs');
+            res.redirect('/listBooking');
         } else {
             console.log('Failed to Delete user Details: ' + err);
         }
