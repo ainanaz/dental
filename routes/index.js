@@ -102,7 +102,6 @@ router.post('/login', (req, res)=>{
 });
 
 // ------------------------------------- LOGIN ------------------------------------------
-
 router.get('/profile', function (req, res, next) {
 	//let id = req.params.unique_id;
 	console.log("profile");
@@ -124,21 +123,6 @@ router.get('/profile', function (req, res, next) {
 		}
 	});
 });
-
-
-// router.get('/editProfile', function(req, res, next) {
-// 	User.findOne({unique_id:req.session.userId},function(err,docs){
-//         if (!err) {
-//             res.render('editProfile', {
-//                 title: "Update User Details",
-//                 data: docs
-//             });
-//         }else{
-//             res.redirect('/profile')
-//         }
-//     });
- 
-// });
 
 router.post('/update', function(req, res, next) {
 	// Create Mongose Method to Update a Existing Record Into Collection
