@@ -253,16 +253,35 @@ router.get("/listBooking",(req, res,)=>{
         if (!err) {
             res.render("admin/listBooking.ejs", {
 				data: docs,
+				
                 
             });
         } else {
             console.log('Failed to retrieve the Users List: ' + err);
         }
-<<<<<<< HEAD
     });
+
 	
 }); 
 
+//updateListBooking Admin
+
+router.post('/updateAdmin', function(req, res, next) {
+	// Create Mongose Method to Update a Existing Record Into Collection
+	
+	var data = {
+    doctor: String
+	}
+		// Save User
+		User.findByIdAndUpdate({_id:req.session.userId}, data, function(err, docs) {
+			if (err) throw err
+			else{
+				console.log(docs);
+				res.redirect('/listBooking');
+			}
+	
+	});
+	}); 
 /*
 router.get("/listBooking",(req, res,)=>{
 
@@ -296,8 +315,10 @@ router.get('/listBooking', function (req, res, next) {
 			});
 		}
 	});
-});  */
+});  
+*/
 
+/*
 router.get('/listBooking', function (req, res, next) {
 	//let id = req.params.unique_id;
 	console.log("listBooking");
@@ -316,12 +337,7 @@ router.get('/listBooking', function (req, res, next) {
 			});
 		}
 	});
-});
-=======
-	});
-}); 
-
->>>>>>> ee693fa17fbdc2e4faea98897b5a23600db71ca1
+}); */
 
 router.get("/deleteAdmin/:_id",(req, res,)=>{
     Booking.findByIdAndRemove(req.params._id, (err, doc) => {
