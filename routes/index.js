@@ -250,16 +250,11 @@ router.get("/listBooking",(req, res,)=>{
 
 //updateListBooking Admin
 
-router.post('/updateAdmin', function(req, res, next) {
+router.post('/updateAdmin/:_id', function(req, res, next) {
 	// Create Mongose Method to Update a Existing Record Into Collection
-	
-	var data = {
-		
-		doctor: req.body.doctor,
-		
-	}
+
 		// Save User
-		Booking.findByIdAndUpdate({_id:req.params._id}, data, function(err, docs) {
+		Booking.findByIdAndUpdate({_id:req.params._id}, {doctor: req.body.doctor}, function(err, docs) {
 			if (err) throw err
 			else{
 				console.log(docs);
