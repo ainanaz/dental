@@ -237,14 +237,93 @@ router.get("/listBooking",(req, res,)=>{
         if (!err) {
             res.render("admin/listBooking.ejs", {
 				data: docs,
+				
                 
+            });
+        } else {
+            console.log('Failed to retrieve the Booking List: ' + err);
+        }
+    });
+
+	
+}); 
+
+//updateListBooking Admin
+
+router.post('/updateAdmin', function(req, res, next) {
+	// Create Mongose Method to Update a Existing Record Into Collection
+	
+	var data = {
+		
+		doctor: req.body.doctor,
+		
+	}
+		// Save User
+		Booking.findByIdAndUpdate({_id:req.params._id}, data, function(err, docs) {
+			if (err) throw err
+			else{
+				console.log(docs);
+				res.redirect('/listBooking');
+			}
+	
+	});
+	}); 
+/*
+router.get("/listBooking",(req, res,)=>{
+
+	User.find((err, docs) => {
+        if (!err) {
+            res.render("admin/listBooking.ejs", {
+                data: docs
             });
         } else {
             console.log('Failed to retrieve the Users List: ' + err);
         }
-	});
-}); 
+    });
+	
+}); */
 
+/*
+router.get('/listBooking', function (req, res, next) {
+	//let id = req.params.unique_id;
+	console.log("listBooking");
+	User.findOne({_id:req.session.userId},function(err,data){
+		console.log("data");
+		console.log(data);
+		if(!data){
+			res.redirect('/');
+		}else{
+	 		console.log("found");
+			return res.render('admin/listBooking.ejs' , {
+				"id":data.unique_id,
+				"name":data.name,
+				
+			});
+		}
+	});
+});  
+*/
+
+/*
+router.get('/listBooking', function (req, res, next) {
+	//let id = req.params.unique_id;
+	console.log("listBooking");
+	Booking.findOne({_id:req.session.userId},function(err,data){
+		console.log("data");
+		console.log(data);
+		if(!data){
+			res.redirect('/');
+		}else{
+	 		console.log("found");
+			return res.render('admin/listBooking.ejs' , {
+				"id":data.unique_id,
+				"name":data.name,
+				"bookDate":data.date,
+				"services":data.services,
+			});
+		}
+	});
+}); */
 
 router.get("/deleteAdmin/:_id",(req, res,)=>{
     Booking.findByIdAndRemove(req.params._id, (err, doc) => {

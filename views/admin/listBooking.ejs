@@ -79,7 +79,7 @@
       <div class="row">
         <div class="col-md-12">
           <h2 class="mb-5">List of Appointment (Admin)</h2>
-          <form method="post">
+          <form method="POST" action="/updateAdmin">
           <div class="table-content table-responsive">
             <table class="w3-table-all w3-centered">
                 <thead>
@@ -101,21 +101,24 @@
                     <td><%= data[i].user_name %></td>
                     <td><%= data[i].bookDate %></td>                   
                     <td><%= data[i].services %></td>
-
+                    <!--<input type="text" name="services" class="form-control " value="<%=data[i].services %>" > -->
                     <td>
-                        <a href="" class="btn border-shadow update">
-                            <span class="text-gradient"><i class="fas fa-pencil-alt"></i></span>
-                        </a>
+                      
+                      <select  name="doctor" class="form-control"  value="<%=data[i].doctor %>" >
+                        <option value="Dr.Ayman">Dr.Ayman</option>
+                        <option value="Dr.Nazwan">Dr.Nazwan</option>
+                        <option value="Dr.Lily">Dr. Lily</option>
+                      </select>
                         </td>
                     <td>
                       
-                      <a class="btn btn-success delete" href="/delete/<%= data[i]._id%>">Update</a>
+                      <input type="submit" value="Update" class="btn btn-success">
                         
                                  
                             </a>
                     </td>
                     <td>
-                      <a  class="btn btn-success delete" href="/deleteAdmin/<%=data[i]._id%>">Cancel</a>
+                      <a onclick="sendMail(); return false" class="btn btn-success delete" href="/deleteAdmin/<%=data[i]._id%>">Cancel</a>
                             <!-- <input type="submit" value="Cancel" class="btn btn-success"> -->
                         </a>
                     </td>
