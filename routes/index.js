@@ -257,7 +257,7 @@ router.get("/listBooking",(req, res,)=>{
                 
             });
         } else {
-            console.log('Failed to retrieve the Users List: ' + err);
+            console.log('Failed to retrieve the Booking List: ' + err);
         }
     });
 
@@ -270,10 +270,12 @@ router.post('/updateAdmin', function(req, res, next) {
 	// Create Mongose Method to Update a Existing Record Into Collection
 	
 	var data = {
-    doctor: String
+		
+		doctor: req.body.doctor,
+		
 	}
 		// Save User
-		User.findByIdAndUpdate({_id:req.session.userId}, data, function(err, docs) {
+		Booking.findByIdAndUpdate({_id:req.params._id}, data, function(err, docs) {
 			if (err) throw err
 			else{
 				console.log(docs);
