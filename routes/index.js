@@ -78,10 +78,20 @@ router.get('/adminPage', function (req, res, next) {
 	return res.render('admin/adminIndex.ejs');
 });
 
+
+
 const admin = {
 	email:"admin@gmail.com",
-	password:"admin123",
-	
+	password:"admin123",	
+}
+
+router.get('/adminPage', function (req, res, next){
+	return res.render('admin/doctorIndex.ejs');
+} );
+
+const doctor = {
+	email:"doctor@gmail.com",
+	password:"doctor123",	
 }
 
 // ------------------------------------- LOGIN ------------------------------------------
@@ -91,11 +101,15 @@ router.post('/login', (req, res)=>{
 	if(req.body.email == admin.email && req.body.password == admin.password){
 		req.session.user = req.body.email;
 		res.redirect('/adminPage');
-	}else{
-	User.findOne({email:req.body.email},function(err,data){
-	if(data.email == req.body.email && data.password == req.body.password){
-        req.session.userId = data._id;
-        res.redirect('/profile');
+	}else if(req.body.email == doctor.email && req.body.password == doctor.password){
+		req.session.user = req.body.email;
+		res.redirect('/adminPage');
+	}else
+	{
+		User.findOne({email:req.body.email},function(err,data){
+		if(data.email == req.body.email && data.password == req.body.password){
+			req.session.userId = data._id;
+			res.redirect('/profile');
 
     }else{
         res.end("Invalid Username")
@@ -103,6 +117,8 @@ router.post('/login', (req, res)=>{
 	})
 	};
 });
+
+
 
 // ------------------------------------- LOGIN ------------------------------------------
 router.get('/profile', function (req, res, next) {
@@ -239,11 +255,21 @@ router.get("/listBooking",(req, res,)=>{
 
 	Booking.find((err, docs) => {
         if (!err) {
-            res.render("admin/listBooking.ejs", {
-				data: docs,
+			if((req.session.user == admin.email)){
+				return res.render('admin/listBooking.ejs', {
+					data:docs,
+				});	
+				}
+				else{
+					return res.render('admin/listBookingforDr.ejs', {
+						data:docs,
+					});	
+				}
+            //res.render("admin/listBooking.ejs", {
+			//	data: docs,
 				
                 
-            });
+            //});
         } else {
             console.log('Failed to retrieve the Booking List: ' + err);
         }
@@ -252,7 +278,9 @@ router.get("/listBooking",(req, res,)=>{
 	
 }); 
 
-//updateListBooking Admin
+
+
+//updateListBooking Admin ----------------
 
 router.post('/updateAdmin/:_id', function(req, res, next) {
 	// Create Mongose Method to Update a Existing Record Into Collection
@@ -267,62 +295,7 @@ router.post('/updateAdmin/:_id', function(req, res, next) {
 	
 	});
 	}); 
-/*
-router.get("/listBooking",(req, res,)=>{
 
-	User.find((err, docs) => {
-        if (!err) {
-            res.render("admin/listBooking.ejs", {
-                data: docs
-            });
-        } else {
-            console.log('Failed to retrieve the Users List: ' + err);
-        }
-    });
-	
-}); */
-
-/*
-router.get('/listBooking', function (req, res, next) {
-	//let id = req.params.unique_id;
-	console.log("listBooking");
-	User.findOne({_id:req.session.userId},function(err,data){
-		console.log("data");
-		console.log(data);
-		if(!data){
-			res.redirect('/');
-		}else{
-	 		console.log("found");
-			return res.render('admin/listBooking.ejs' , {
-				"id":data.unique_id,
-				"name":data.name,
-				
-			});
-		}
-	});
-});  
-*/
-
-/*
-router.get('/listBooking', function (req, res, next) {
-	//let id = req.params.unique_id;
-	console.log("listBooking");
-	Booking.findOne({_id:req.session.userId},function(err,data){
-		console.log("data");
-		console.log(data);
-		if(!data){
-			res.redirect('/');
-		}else{
-	 		console.log("found");
-			return res.render('admin/listBooking.ejs' , {
-				"id":data.unique_id,
-				"name":data.name,
-				"bookDate":data.date,
-				"services":data.services,
-			});
-		}
-	});
-}); */
 
 router.get("/deleteAdmin/:_id",(req, res,)=>{
     Booking.findByIdAndRemove(req.params._id, (err, doc) => {
@@ -356,9 +329,44 @@ router.get("/patientRecord",(req, res,)=>{
 	
 }); 
 
+//LIST OF PATIENT ---------------------------
+router.get("/listPatient",(req, res,)=>{
+
+	User.find((err, docs) => {
+        if (!err) {
+            res.render("admin/listPatient.ejs", {
+				data: docs,
+				
+                
+            });
+        } else {
+            console.log('Failed to retrieve the Patient List: ' + err);
+        }
+    });
+
+	
+}); 
 
 //-----------------------------------------------------ADMIN---------------------------------------
+//-----------------------------------------------DOCTOR----------------------------------------
 
+/*router.get("/listBookingforDr",(req, res,)=>{
+
+	Booking.find((err, docs) => {
+        if (!err) {
+            res.render("admin/listBookingforDr.ejs", {
+				data: docs,
+    
+            });
+        } else {
+            console.log('Failed to retrieve the Booking List: ' + err);
+        }
+    });
+
+}); */
+
+
+//--------------------------------------------------------------------------------------------
 // router.get('/bookingInfo', function (req, res, next) {
 // 	return res.render('bookingInfo.ejs');
 // });
@@ -392,7 +400,13 @@ router.get('/bookingInfo', function (req, res, next) {
 });
 
 router.get('/listBooking', function (req, res, next) {
-	return res.render('admin/listBooking.ejs');
+	if((req.session.user == admin.email)){
+	return res.render('admin/listBooking.ejs');	
+	}
+	else{
+		return res.render('admin/listBookingforDr.ejs');
+	}
+	
 });
 
 router.get('/patientRecord', function (req, res, next) {
@@ -407,38 +421,9 @@ router.get('/listPatient', function (req, res, next) {
 	return res.render('admin/listPatient.ejs');
 });
 
-router.get('/listBookingforDr', function (req, res, next) {
+/*router.get('/listBookingforDr', function (req, res, next) {
 	return res.render('admin/listBookingforDr.ejs');
-});
+});*/
 
 module.exports = router;
 
-//---------------------------BUTTON CANCEL AND SEND EMAIL----------------
-/*
-function sendMail() 
-{
-  var nodemailer = require('nodemailer');
-
-var transporter = nodemailer.createTransport({
-  service: 'gmail',
-  auth: {
-    user: 'dentalaimu@gmail.com',
-    pass: 'aimu1234'
-  }
-});
-
-var mailOptions = {
-  from: 'dentalaimu@gmail.com',
-  to: 'ummuaiman3019@gmail.com',
-  subject: 'Sending Email using Node.js',
-  text: 'That was easy!'
-};
-
-transporter.sendMail(mailOptions, function(error, info){
-  if (error) {
-    console.log(error);
-  } else {
-    console.log('Email sent: ' + info.response);
-  }
-});  
-} */
