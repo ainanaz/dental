@@ -4,6 +4,8 @@ var User = require('../models/user');
 var Booking = require('../models/appointment');
 var nodemailer = require('nodemailer');
 
+ 
+
 router.get('/', function (req, res, next) {
 	return res.render('index.ejs');
 });
@@ -78,7 +80,8 @@ router.get('/adminPage', function (req, res, next) {
 
 const admin = {
 	email:"admin@gmail.com",
-	password:"admin123"
+	password:"admin123",
+	
 }
 
 // ------------------------------------- LOGIN ------------------------------------------
@@ -176,7 +179,8 @@ router.post("/booking",(req,res) => {
 		user_name: data.name,
 		bookDate : req.body.date,
 		bookTime : req.body.time,
-		services: req.body.services   
+		services: req.body.services,
+		status:"Approved"   
     })
         
     // new booking
@@ -330,6 +334,28 @@ router.get("/deleteAdmin/:_id",(req, res,)=>{
         }
  });
 });
+
+//Patient Record-----------------
+
+router.get("/patientRecord",(req, res,)=>{
+
+	
+	Booking.find((err, docs) => {
+        if (!err) {
+			
+            res.render("admin/patientRecord.ejs", {
+				data: docs,
+				status:"Approved"
+                
+            });
+        } else {
+            console.log('Failed to retrieve the Booking List: ' + err);
+        }
+    });
+
+	
+}); 
+
 
 //-----------------------------------------------------ADMIN---------------------------------------
 

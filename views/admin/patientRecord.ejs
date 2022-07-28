@@ -91,7 +91,17 @@
                     </tr>
                 </thead>
                 <tbody>
+                  <% for(var i = 0; i < data.length; i++) { %>
                     <tr>
+                      
+                      <td><%= data[i].user_name %></td>
+                      <td><%= data[i].bookDate %></td>                   
+                      <td><%= data[i].services %></td>
+                      <td><%= data[i].doctor %></td>
+                      <td><%= data[i].status %></td>
+
+                      <% } %>
+                    <!--<tr>
                         <td>Aqilah</td>
                         <td>12032021</td>
                         <td>Scaling</td>
@@ -125,7 +135,7 @@
                 <td>Braces</td>
                 <td>Dr Emily</td>
                 <td>Canceled</td>
-            </tr>
+            </tr> -->
                     </tbody>
                 </table>
             </div>
