@@ -10,6 +10,7 @@ bookSchema = new Schema( {
     bookTime: String,
     services: String,
     doctor: String,
+    status: String
     
     
 
