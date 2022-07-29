@@ -227,8 +227,6 @@ router.get("/delete/:_id",(req, res,)=>{
 
 //-------------------------------------------------------APPOINTMENT-------------------------------------------------------------------
  
-
-
 //LIST BOOKING
 //------------------------------------------------ADMIN------------------------------------------------------------------------------
 router.get("/listBooking",(req, res,)=>{
@@ -263,62 +261,7 @@ router.post('/updateAdmin/:_id', function(req, res, next) {
 	
 	});
 	}); 
-/*
-router.get("/listBooking",(req, res,)=>{
 
-	User.find((err, docs) => {
-        if (!err) {
-            res.render("admin/listBooking.ejs", {
-                data: docs
-            });
-        } else {
-            console.log('Failed to retrieve the Users List: ' + err);
-        }
-    });
-	
-}); */
-
-/*
-router.get('/listBooking', function (req, res, next) {
-	//let id = req.params.unique_id;
-	console.log("listBooking");
-	User.findOne({_id:req.session.userId},function(err,data){
-		console.log("data");
-		console.log(data);
-		if(!data){
-			res.redirect('/');
-		}else{
-	 		console.log("found");
-			return res.render('admin/listBooking.ejs' , {
-				"id":data.unique_id,
-				"name":data.name,
-				
-			});
-		}
-	});
-});  
-*/
-
-/*
-router.get('/listBooking', function (req, res, next) {
-	//let id = req.params.unique_id;
-	console.log("listBooking");
-	Booking.findOne({_id:req.session.userId},function(err,data){
-		console.log("data");
-		console.log(data);
-		if(!data){
-			res.redirect('/');
-		}else{
-	 		console.log("found");
-			return res.render('admin/listBooking.ejs' , {
-				"id":data.unique_id,
-				"name":data.name,
-				"bookDate":data.date,
-				"services":data.services,
-			});
-		}
-	});
-}); */
 
 router.get("/deleteAdmin/:_id",(req, res,)=>{
     Booking.findByIdAndRemove(req.params._id, (err, doc) => {
@@ -333,12 +276,21 @@ router.get("/deleteAdmin/:_id",(req, res,)=>{
 
 //-----------------------------------------------------ADMIN---------------------------------------
 
-// router.get('/bookingInfo', function (req, res, next) {
-// 	return res.render('bookingInfo.ejs');
-// });
+router.get('/mainpage', function (req, res, next) {
+	return res.render('mainpage.ejs');
+});
+
+router.get('/services2', function (req, res, next) {
+	return res.render('services2.ejs');
+});
 
 router.get('/booking', function (req, res, next) {
+	if(req.session.userId){
 	return res.render('booking.ejs');
+}
+else{
+	res.send("Please Login First For Booking ");
+}
 });
 
 router.get('/editprofile', function (req, res, next) {
@@ -349,16 +301,8 @@ router.get('/services', function (req, res, next) {
 	return res.render('services.ejs');
 });
 
-router.get('/about', function (req, res, next) {
-	return res.render('about.ejs');
-});
-
 router.get('/contact', function (req, res, next) {
 	return res.render('contact.ejs');
-});
-
-router.get('/rooms', function (req, res, next) {
-	return res.render('rooms.ejs');
 });
 
 router.get('/bookingInfo', function (req, res, next) {
@@ -366,7 +310,12 @@ router.get('/bookingInfo', function (req, res, next) {
 });
 
 router.get('/listBooking', function (req, res, next) {
+	if((req.session.user = "admin@gmail.com")){
 	return res.render('admin/listBooking.ejs');
+	}
+	else{
+		return res.render('admin/listBookingforDr.ejs');
+	}
 });
 
 router.get('/patientRecord', function (req, res, next) {
