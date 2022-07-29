@@ -321,24 +321,7 @@ router.get('/services2', function (req, res, next) {
 	return res.render('services2.ejs');
 });
 
-router.get("/patientRecord",(req, res,)=>{
 
-	
-	Booking.find((err, docs) => {
-        if (!err) {
-			
-            res.render("admin/patientRecord.ejs", {
-				data: docs,
-				status:"Approved"
-                
-            });
-        } else {
-            console.log('Failed to retrieve the Booking List: ' + err);
-        }
-    });
-
-	
-}); 
 
 //LIST OF PATIENT ---------------------------
 router.get("/listPatient",(req, res,)=>{
@@ -347,8 +330,6 @@ router.get("/listPatient",(req, res,)=>{
         if (!err) {
             res.render("admin/listPatient.ejs", {
 				data: docs,
-				
-                
             });
         } else {
             console.log('Failed to retrieve the Patient List: ' + err);
@@ -357,6 +338,19 @@ router.get("/listPatient",(req, res,)=>{
 
 	
 }); 
+
+router.get("/patientRecord/:unique_id",(req, res,)=>{
+		Booking.find({user_id:req.params.unique_id},(err, document) => {
+			if (!err) {
+				res.render('admin/patientRecord.ejs', {
+					data: document
+					
+				});
+			} else {
+				console.log('Failed to retrieve the Booking List: ' + err);
+			}
+		});
+});
 
 //-----------------------------------------------------ADMIN---------------------------------------
 
