@@ -9,7 +9,10 @@ bookSchema = new Schema( {
     bookDate: String,
     bookTime: String,
     services: String,
-    doctor: String
+    doctor: String,
+    status: String
+    
+    
 
 }),
 Booking = mongoose.model('Booking', bookSchema);

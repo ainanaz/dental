@@ -41,10 +41,10 @@
                 <a class="nav-link" href="/listBooking">Booking List</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="/bookingDetail">Booking Detail</a>
+                <a class="nav-link" href="/patientRecord">Patient Record</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="/patientRecord">Patient Record</a>
+                <a class="nav-link" href="/listPatient">Patient List</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="/logout">Logout</a>
@@ -101,25 +101,18 @@
                     <td><%= data[i].user_name %></td>
                     <td><%= data[i].bookDate %></td>                   
                     <td><%= data[i].services %></td>
-                    <!--<input type="text" name="services" class="form-control " value="<%=data[i].services %>" > -->
+                    
                     <td>
                       <form method="POST" action="/updateAdmin/<%=data[i]._id %>">
                         <input type="text" name="doctor" class="form-control" value='<%=data[i].doctor%>' >
-                      <!-- <select  name="doctor" class="form-control"  value='<%=data[i].doctor %>' >
-                        <option value="-">-</option>
-                        <option value="Dr.Ayman">Dr.Ayman</option>
-                        <option value="Dr.Nazwan">Dr.Nazwan</option>
-                        <option value="Dr.Lily">Dr. Lily</option>
-                      </select> -->
-                   
-                        </td>
+                    </td>
                     <td>
-                      
                       <input type="submit" value="Update" class="btn btn-success">
-                    </td> </form>
+                    </td> 
+                  </form>
                     <td>
                       <a class="btn btn-success delete" href="/deleteAdmin/<%=data[i]._id%>">Cancel</a>
-                            <!-- <input type="submit" value="Cancel" class="btn btn-success"> -->
+                            
                         </a>
                     </td>
                 </tr>
