@@ -108,14 +108,18 @@ router.post('/login', (req, res)=>{
 	}else
 	{
 		User.findOne({email:req.body.email},function(err,data){
+		if(data){
 		if(data.email == req.body.email && data.password == req.body.password){
 			req.session.userId = data._id;
 			res.redirect('/profile');
 
-    }else{
-        res.end("Invalid Username")
-    }
-	})
+    	}else{
+        res.end("Invalid Password")
+    	}
+		}else{
+			res.end("This email is not registered")
+		}
+		})
 	};
 });
 

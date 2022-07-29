@@ -8,16 +8,18 @@ var mongoose = require('mongoose');
 var session = require('express-session');
 
 
-mongoose.connect('mongodb://localhost:27017/dentalProject', {
+mongoose.connect('mongodb+srv://ainanaz:ainanaz2000@cluster0.nujyg.mongodb.net/dentalProject', {
+
   useNewUrlParser: true,
   useUnifiedTopology: true
 }, (err) => {
   if (!err) {
     console.log('MongoDB Connection Succeeded.');
   } else {
-    console.log('Error in DB connection : ' + err);
+    console.log('Error in DB Connection : ' + err);
   }
-});
+}); 
+
 
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
