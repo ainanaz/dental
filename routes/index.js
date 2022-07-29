@@ -75,6 +75,7 @@ router.post('/signup', function(req, res, next) {
 });
 
 router.get('/adminPage', function (req, res, next) {
+	console.log(req.session.user);
 	return res.render('admin/adminIndex.ejs');
 });
 
@@ -249,22 +250,26 @@ router.get("/delete/:_id",(req, res,)=>{
  
 //LIST BOOKING
 //------------------------------------------------ADMIN------------------------------------------------------------------------------
+
+
+
 router.get("/listBooking",(req, res,)=>{
 
 	Booking.find((err, docs) => {
         if (!err) {
 			if((req.session.user == admin.email)){
+				
 				return res.render('admin/listBooking.ejs', {
 					data:docs,
 				});	
 				}
-				else{
+			 else if ((req.session.user == doctor.email)){
 					return res.render('admin/listBookingforDr.ejs', {
 						data:docs,
 					});	
 				}
-            //res.render("admin/listBooking.ejs", {
-			//	data: docs,
+					
+            
 				
                 
             //});
@@ -354,28 +359,7 @@ router.get("/listPatient",(req, res,)=>{
 }); 
 
 //-----------------------------------------------------ADMIN---------------------------------------
-//-----------------------------------------------DOCTOR----------------------------------------
 
-/*router.get("/listBookingforDr",(req, res,)=>{
-
-	Booking.find((err, docs) => {
-        if (!err) {
-            res.render("admin/listBookingforDr.ejs", {
-				data: docs,
-    
-            });
-        } else {
-            console.log('Failed to retrieve the Booking List: ' + err);
-        }
-    });
-
-}); */
-
-
-//--------------------------------------------------------------------------------------------
-// router.get('/bookingInfo', function (req, res, next) {
-// 	return res.render('bookingInfo.ejs');
-// });
 
 router.get('/booking', function (req, res, next) {
 	if(req.session.userId){
@@ -424,9 +408,7 @@ router.get('/listPatient', function (req, res, next) {
 	return res.render('admin/listPatient.ejs');
 });
 
-/*router.get('/listBookingforDr', function (req, res, next) {
-	return res.render('admin/listBookingforDr.ejs');
-});*/
+
 
 module.exports = router;
 

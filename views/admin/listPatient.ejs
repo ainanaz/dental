@@ -20,7 +20,7 @@
 
     <!-- Theme Style -->
     <link rel="stylesheet" href="css/style.css">
-  </head>bvc jhuuuuuuuuuuuuuuuu 
+  </head>
   <body>
     
     <header role="banner">
@@ -41,7 +41,10 @@
                 <a class="nav-link" href="/listBooking">Booking List</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="/listpatient">Patient Record</a>
+                <a class="nav-link" href="/patientRecord">Patient Record</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/listPatient">Patient List</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="/logout">Logout</a>
@@ -88,27 +91,18 @@
                     </tr>
                 </thead>
                 <tbody>
+                  <% for(var i = 0; i < data.length; i++) { %>
                     <tr>
-                        <td><a class="nav-link" href="/patientRecord">1</a></td>
-                        <td>Aqilah</td>
-                        <td>0113456789</td>
-                        <td>Kajang</td>
-                        <td>qilah@gmail.com</td>
-                    </tr>
-                    <tr>
-                      <td><a class="nav-link" href="">2</a></td>
-                      <td>Wan</td>
-                      <td>019876543</td>
-                      <td>Bangi</td>
-                      <td>wan@gmail.com</td>
+                      <td><%= i + 1 %></td>
+                      <td><%= data[i].name %></td>
+                      <td><%= data[i].phone %></td>                   
+                      <td><%= data[i].city %></td>
+                      <td><%=data[i].email%></td>
+
+                    </form>
+                      
                   </tr>
-                  <tr>
-                    <td><a class="nav-link" href="">3</a></td>
-                    <td>Chiwei</td>
-                    <td>014562356</td>
-                    <td>Bangi</td>
-                    <td>chiwei@gmail.com</td>
-                </tr>
+                  <% } %>
                     </tbody>
                 </table>
             </div>
